@@ -6,16 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.anychart.AnyChartView
-        android:id="@+id/any_chart_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:id="@+id/button"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/ic_mic_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.anychart.AnyChartView
+            android:id="@+id/any_chart_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="200dp">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
     </com.anychart.AnyChartView>
+
+    <TextView
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="160dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.465"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

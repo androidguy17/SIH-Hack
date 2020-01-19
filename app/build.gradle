@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    def nav_version = "2.1.0"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -35,5 +36,9 @@ dependencies {
 
     //chats
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+    // fragments
+
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
 }
