@@ -31,6 +31,10 @@ import com.anychart.enums.Anchor
 import com.anychart.enums.MarkerType
 import com.anychart.enums.TooltipPositionMode
 import com.anychart.graphics.vector.Stroke
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -46,39 +50,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
+
         charts() // *********** important
 
-
+        permission()
 
 
 
         button.setOnClickListener(View.OnClickListener {
-            // Here, thisActivity is the current activity
-            if (ContextCompat.checkSelfPermission(
-                    this@MainActivity,
-                    Manifest.permission.RECORD_AUDIO
-                )
-                !== PackageManager.PERMISSION_GRANTED
-            ) { // Permission is not granted
-// Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this@MainActivity,
-                        Manifest.permission.RECORD_AUDIO
-                    )
-                ) { // Show an explanation to the user *asynchronously* -- don't block
-// this thread waiting for the user's response! After the user
-// sees the explanation, try again to request the permission.
-                } else { // No explanation needed; request the permission
-                    ActivityCompat.requestPermissions(
-                        this@MainActivity,
-                        arrayOf(Manifest.permission.RECORD_AUDIO),
-                        MainActivity.Companion.MY_PERMISSIONS_REQUEST_RECORD_AUDIO
-                    )
-                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-// app-defined int constant. The callback method gets the
-// result of the request.
-                }
-            } else { // Permission has already been granted
+
+             // Permission has already been granted
+
+            speak("I am Ready")
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 intent.putExtra(
                     RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -86,16 +71,82 @@ class MainActivity : AppCompatActivity() {
                 )
                 intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
                 speechRecog!!.startListening(intent)
-            }
+
         })
         initializeTextToSpeech()
         initializeSpeechRecognizer()
 
-
+        firebase()
 
 
 
     }
+
+
+
+    val REQ =420
+    fun permission(){
+
+        if(Build.VERSION.SDK_INT>=24) {
+
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) !=
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(arrayOf(android.Manifest.permission.RECORD_AUDIO),REQ)
+
+
+            }
+
+            return
+
+
+        }
+        return
+
+
+
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+
+        when (requestCode) {
+
+            REQ -> {
+
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(this, "permission granted", Toast.LENGTH_LONG).show()
+                } else {
+
+                    Toast.makeText(this, "failed to access microphone", Toast.LENGTH_LONG).show()
+                }
+            }
+
+
+        }
+
+
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+
+
+fun firebase() {
+
+
+    var ref = FirebaseDatabase.getInstance().getReference()
+
+   // ref.child("hi").setValue("hi")
+
+
+}
+
 
 
     private fun speak(message: String) {
@@ -151,6 +202,8 @@ class MainActivity : AppCompatActivity() {
     private fun processResult(result_message: String) {
         var result_message = result_message
         result_message = result_message.toLowerCase()
+
+        editText.text = result_message.toString()
         //        Handle at least four sample cases
 //        First: What is your Name?
 //        Second: What is the time?
@@ -159,7 +212,7 @@ class MainActivity : AppCompatActivity() {
         if (result_message.indexOf("what") != -1) {
             if (result_message.indexOf("your name") != -1) {
                 speak("My Name is Mr.Android. Nice to meet you!")
-                Toast.makeText(this,"Fuck you",Toast.LENGTH_LONG).show()
+
 
             }
             if (result_message.indexOf("time") != -1) {
@@ -172,9 +225,12 @@ class MainActivity : AppCompatActivity() {
             }
         } else if (result_message.indexOf("earth") != -1) {
             speak("Don't be silly, The earth is a sphere. As are all other planets and celestial bodies")
+
+            Toast.makeText(this,"you",Toast.LENGTH_LONG).show()
         } else if (result_message.indexOf("browser") != -1) {
             speak("Opening a browser right away master.")
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/AnNJPf-4T70"))
+            Toast.makeText(this,"you",Toast.LENGTH_LONG).show()
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.co.in"))
             startActivity(intent)
         }
     }
